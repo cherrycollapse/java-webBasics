@@ -60,7 +60,7 @@
 <p>
     Основными дополнениями можно считать:
     подключение файлов и как следствие разбиение страниц
-    <jsp:include page="WEB-INF/fragment.jsp"/>
+    <jsp:include page="fragment.jsp"/>
     Условная верстка
         <% if(x < 10) { %>
     <b> x < 10 </b>
@@ -90,7 +90,7 @@
     Обеспечить защиту footer.jsp от прямого доступа,
     на главной странице поставить ссылку на форму
 </p>
-<button><a href="reg.jsp">Форма регистрации</a></button>
+<button><a href="http://localhost:8080/java_webBasics_war_exploded/reg">Форма регистрации</a></button>
 
 </body>
 </html>
