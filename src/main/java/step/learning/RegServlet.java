@@ -8,6 +8,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
+// /* Д.З. Реализовать прием данных из формы прошлого ДЗ, вывести полученные
+//данные на странице. Использовать Сервлеты, перенаправления, сессии.
+// */
+
 @WebServlet("/reg")
 public class RegServlet extends HttpServlet {
     @Override
