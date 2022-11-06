@@ -9,8 +9,6 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 
 public class DataFilter implements Filter {
     private FilterConfig filterConfig;
@@ -37,7 +35,6 @@ public class DataFilter implements Filter {
         else {
             Connection connection = dataService.getConnection();
 
-            List<String> elements = new ArrayList<>();
             ResultSet res;
             String queryRes;
 
