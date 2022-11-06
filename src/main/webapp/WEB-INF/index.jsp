@@ -2,6 +2,8 @@
 <%
     String[] langs = new String[] { "uk", "en", "ru", "java" } ;
     String home = "/WebBasics" ;
+
+    String countFromDataFilter = (String) request.getAttribute("count");
 %>
 <!doctype html >
 <html>
@@ -24,6 +26,13 @@
     </style>
 </head>
 <body>
+<a href="filters">Web-filters</a>
+
+<div>
+    <p>На стартовой странице вывести данные о кол-ве записей в БД</p>
+    Count :  <%= countFromDataFilter %><br/><br/>
+</div>
+
 <h2>JSP - Java Server Pages</h2>
 <p>
     1. Новый проект и запуск:
