@@ -1,5 +1,7 @@
 package step.learning.filters;
 
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import step.learning.services.DataService;
 import step.learning.services.MysqlDataService;
 
@@ -10,8 +12,16 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+@Singleton
 public class DataFilter implements Filter {
-    private FilterConfig filterConfig;
+
+    //private FilterConfig filterConfig;
+    private final DataService dataService ;
+    private FilterConfig filterConfig ;
+    @Inject
+    public DataFilter( DataService dataService ) {
+        this.dataService = dataService ;
+    }
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

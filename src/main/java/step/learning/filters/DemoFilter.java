@@ -1,5 +1,7 @@
 package step.learning.filters;
 
+import com.google.inject.Singleton;
+
 import javax.servlet.*;
 import javax.servlet.annotation.WebFilter;
 import java.io.IOException;
@@ -7,6 +9,8 @@ import java.io.IOException;
 // привязка фильтра через аннотацию, (аннотациями порядок фильтров не гарантируется, через xml порядок гарантирован)
 // /* - подключение ко всем видам запросов
 //@WebFilter( "/*" )
+
+@Singleton
 public class DemoFilter implements Filter {
 
     private FilterConfig filterConfig;

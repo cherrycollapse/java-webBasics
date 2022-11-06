@@ -1,5 +1,7 @@
 package step.learning;
 
+import com.google.inject.Singleton;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -9,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @WebServlet( "/servlet" )
+@Singleton
 public class ViewServlet extends HttpServlet {
     @Override
     protected void doGet(

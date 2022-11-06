@@ -1,5 +1,7 @@
 package step.learning;
 
+import com.google.inject.Singleton;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -13,6 +15,7 @@ import java.io.IOException;
 // */
 
 @WebServlet("/reg")
+@Singleton
 public class RegServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {

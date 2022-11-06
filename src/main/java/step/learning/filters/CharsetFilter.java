@@ -1,8 +1,11 @@
 package step.learning.filters;
 
+import com.google.inject.Singleton;
+
 import javax.servlet.*;
 import java.io.IOException;
 
+@Singleton
 public class CharsetFilter implements Filter{
 
     private FilterConfig filterConfig;

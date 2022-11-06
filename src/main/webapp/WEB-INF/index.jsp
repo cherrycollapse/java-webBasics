@@ -27,6 +27,9 @@
 </head>
 <body>
 <a href="filters">Web-filters</a>
+<br/>
+<a href="../guice.jsp">Инверсия управления</a>
+<br/>
 
 <div>
     <p>На стартовой странице вывести данные о кол-ве записей в БД</p>
