@@ -120,6 +120,10 @@ public class RegistrationServlet extends HttpServlet {
         } catch (Exception ex) {
             errorMessage = ex.getMessage();
         }
+        
+        // Д.З. Забезпечити відновлення у полях форми реєстрації введених раніше
+        // даних (окрім паролів) у разі якщо дані не пройшли валідацію.  
+        
         // Результат валидации
         if (errorMessage != null) {
             session.setAttribute("savedLogin", req.getParameter("Login"));
