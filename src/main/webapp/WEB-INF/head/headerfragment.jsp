@@ -25,7 +25,6 @@
 
                 <li>
                     <a href="<%=home%>/profile">
-                        <%--Если пользователь авторизован меняем текст логин на профиль--%>
                         <%if (authUser == null) {%>
                         Login
                         <%} else {%>
@@ -35,12 +34,9 @@
                     </a>
                 </li>
 
-                <%--Если пользователь авторизован выключаем регистрацию--%>
                 <%if (authUser == null) {%>
                 <li>
-                    <a href="<%=home%>/registration">
-                        Registration
-                    </a>
+                    <a href="<%=home%>/registration/">Registration</a>
                 </li>
                 <%}%>
             </ul>

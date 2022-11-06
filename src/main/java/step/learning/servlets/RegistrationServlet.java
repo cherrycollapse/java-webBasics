@@ -16,7 +16,8 @@ import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.UUID;
 
-@WebServlet("/registration")
+@WebServlet("/registration/")
+@MultipartConfig
 @Singleton
 public class RegistrationServlet extends HttpServlet {
     @Inject
@@ -61,7 +62,7 @@ public class RegistrationServlet extends HttpServlet {
         String errorMessage = null;
         try {
             if (userLogin == null || userLogin.isEmpty()) {
-                System.out.println(req.getParameter("userLogin"));
+                System.out.println(req.getParameter("Login"));
                 throw new Exception("Login could not be empty");
             }
             if (!userLogin.equals(userLogin.trim())) {
@@ -121,6 +122,8 @@ public class RegistrationServlet extends HttpServlet {
         }
         // Результат валидации
         if (errorMessage != null) {
+            session.setAttribute("savedLogin", req.getParameter("Login"));
+            session.setAttribute("savedName", req.getParameter("Name"));
             session.setAttribute("regError", errorMessage);
         } else {
             session.setAttribute("regOk", "Registration successful");

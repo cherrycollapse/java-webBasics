@@ -4,6 +4,9 @@
     String home = request.getContextPath();
     String regError = (String) request.getAttribute("regError");
     String regOk = (String) request.getAttribute("regOk");
+
+    String savedLogin = (String) request.getAttribute("savedLogin");
+    String savedName = (String) request.getAttribute("savedName");
 %>
 
 <div class="row">
@@ -16,7 +19,7 @@
     </h3><% } %>
 
         <div>
-            <form method="post" action="" enctype="multipart/form-data">
+            <form method="POST" action="" enctype="multipart/form-data">
                 <div class="form-group">
 
                     <!-- Login -->
@@ -24,6 +27,9 @@
                         <div class="input-field">
                           <label for="login">Enter Login</label>
                           <input name="Login" id="login" type="text" class="validate">
+                            <%if(savedLogin!=null){%>
+                            value="<%=savedLogin%>"
+                            <%}%>
                         </div>
                     </div>
 
@@ -32,6 +38,9 @@
                         <div class="input-field">
                           <label for="name">Enter First and Last Name</label>
                           <input name="Name" id="name" type="text" class="validate">
+                            <%if(savedName!=null){%>
+                            value="<%=savedName%>"
+                            <%}%>
                         </div>
                     </div>
 
