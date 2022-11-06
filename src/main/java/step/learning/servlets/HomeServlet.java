@@ -1,4 +1,4 @@
-package step.learning;
+package step.learning.servlets;
 
 import com.google.inject.Singleton;
 import step.learning.services.hash.MD5HashService;

@@ -1,7 +1,8 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
 <%
     String[] langs = new String[] { "uk", "en", "ru", "java" } ;
-    String home = "/WebBasics" ;
+//    String home = "/WebBasics" ;
+    String home = request.getContextPath() ;
 
     String countFromDataFilter = (String) request.getAttribute("count");
 
@@ -13,25 +14,39 @@
 <head>
     <meta charset="UTF-8" />
     <title>JSP basics</title>
-    <style>
-        input[type=radio] {
-            visibility: hidden;
-        }
-        input[type=radio]:checked + label {
-            border: 1px solid salmon;
-            font-weight: bold;
-        }
-        label {
-            cursor: pointer;
-            font-size: larger;
-            font-variant: all-petite-caps;
-        }
-    </style>
+<%--    <style>--%>
+<%--        input[type=radio] {--%>
+<%--            visibility: hidden;--%>
+<%--        }--%>
+<%--        input[type=radio]:checked + label {--%>
+<%--            border: 1px solid salmon;--%>
+<%--            font-weight: bold;--%>
+<%--        }--%>
+<%--        label {--%>
+<%--            cursor: pointer;--%>
+<%--            font-size: larger;--%>
+<%--            font-variant: all-petite-caps;--%>
+<%--        }--%>
+<%--    </style>--%>
+
+    <link rel="stylesheet" href="<%=home%>/css/style.css">
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </head>
+
+
 <body>
-<a href="filters">Web-filters</a>
+
+<jsp:include page="/WEB-INF/head/headerfragment.jsp"/>
+
+<a href="<%=home%>/filters">Web-filters</a>
 <br/>
-<a href="../guice.jsp">Инверсия управления</a>
+<a href="<%=home%>/servlet">Web-servlets</a>
+<br/>
+<a href="<%=home%>/guice.jsp">Инверсия управления</a>
 <br/>
 
 <h1> Homeworks </h1>
@@ -43,13 +58,13 @@
 <div>
 <p>Cоздать форму для хеширования введенной пользователем строки</p>
 <form method="post" action="">
-    <div>
-        <div>
+    <div class="row">
+        <div class="input-field col s3">
             <label for="Hash">Hash</label>
             <br/>
             <input name="HashInput" id="Hash" type="text">
+            <button class="col">Submit</button>
         </div>
-        <button>Submit</button>
     </div>
 </form>
 <%if(MD5 != null || Sha1 !=null){%>
@@ -64,7 +79,7 @@
 <%}%>
 </div>
 
-
+<div>
 <h2>JSP - Java Server Pages</h2>
 <p>
     1. Новый проект и запуск:
@@ -101,7 +116,7 @@
 <p>
     Основными дополнениями можно считать:
     подключение файлов и как следствие разбиение страниц
-    <jsp:include page="fragment.jsp"/>
+    <jsp:include page="content/fragment.jsp"/>
     Условная верстка
         <% if(x < 10) { %>
     <b> x < 10 </b>
@@ -131,7 +146,8 @@
     Обеспечить защиту footer.jsp от прямого доступа,
     на главной странице поставить ссылку на форму
 </p>
-<button><a href="http://localhost:8080/java_webBasics_war_exploded/reg">Форма регистрации</a></button>
+<%--<button><a href="http://localhost:8080/java_webBasics_war_exploded/reg">Форма регистрации</a></button>--%>
+</div>
 
 </body>
 </html>

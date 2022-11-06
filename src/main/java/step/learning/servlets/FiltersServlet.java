@@ -1,4 +1,4 @@
-package step.learning;
+package step.learning.servlets;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
@@ -59,7 +59,8 @@ public class FiltersServlet extends HttpServlet {
         }
 
         req.setAttribute("users", users.toArray(new String[0]));
-        req.getRequestDispatcher("WEB-INF/filters.jsp").forward(req,resp);
+//        req.getRequestDispatcher("WEB-INF/filters.jsp").forward(req,resp);
+        req.getRequestDispatcher("WEB-INF/content/filters.jsp").forward(req,resp);
         System.out.println( "Servlet - after forward");
     }
 }

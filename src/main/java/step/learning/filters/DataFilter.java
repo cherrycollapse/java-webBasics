@@ -40,7 +40,7 @@ public class DataFilter implements Filter {
 
         // пытаемся получить подключение
         if(dataService.getConnection() == null){
-            servletRequest.getRequestDispatcher( "WEB-INF/static.jsp" ).forward( servletRequest, servletResponse );
+            servletRequest.getRequestDispatcher( "WEB-INF/content/static.jsp" ).forward( servletRequest, servletResponse );
         }
         else {
             Connection connection = dataService.getConnection();

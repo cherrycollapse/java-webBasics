@@ -1,4 +1,4 @@
-package step.learning;
+package step.learning.servlets;
 
 import com.google.inject.Singleton;
 
