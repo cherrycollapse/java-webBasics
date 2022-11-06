@@ -4,6 +4,9 @@
     String home = "/WebBasics" ;
 
     String countFromDataFilter = (String) request.getAttribute("count");
+
+    String MD5 = (String) request.getAttribute("HashInputMD5");
+    String Sha1 = (String) request.getAttribute("HashInputSha1");
 %>
 <!doctype html >
 <html>
@@ -31,10 +34,36 @@
 <a href="../guice.jsp">Инверсия управления</a>
 <br/>
 
+<h1> Homeworks </h1>
 <div>
     <p>На стартовой странице вывести данные о кол-ве записей в БД</p>
     Count :  <%= countFromDataFilter %><br/><br/>
 </div>
+
+<div>
+<p>Cоздать форму для хеширования введенной пользователем строки</p>
+<form method="post" action="">
+    <div>
+        <div>
+            <label for="Hash">Hash</label>
+            <br/>
+            <input name="HashInput" id="Hash" type="text">
+        </div>
+        <button>Submit</button>
+    </div>
+</form>
+<%if(MD5 != null || Sha1 !=null){%>
+<div>
+    <p>
+        MD5: <%=MD5%>
+    </p>
+    <p>
+        Sha1: <%=Sha1%>
+    </p>
+</div>
+<%}%>
+</div>
+
 
 <h2>JSP - Java Server Pages</h2>
 <p>
