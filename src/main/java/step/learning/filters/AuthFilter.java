@@ -30,16 +30,14 @@ public class AuthFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         HttpSession session = request.getSession();
-
-        // log out
+        // Традиционно, сначала проверяется log out
         if (request.getParameter("logout") != null) {
             session.removeAttribute("AuthUserId");
-            // переадресация на главную страницу
+            // После выхода переадресация - на главную страницу
             response.sendRedirect(request.getContextPath());
             return;
         }
-
-        // log in
+        // затем log in
         if (request.getMethod().equalsIgnoreCase("POST")) {
             if ("auth-form".equals(request.getParameter("form-id"))) {
                 String userLogin = request.getParameter("Login");
@@ -50,19 +48,20 @@ public class AuthFilter implements Filter {
                 } else {
                     session.setAttribute("AuthUserId", user.getId());
                 }
-                System.out.println(userLogin + "  " + userPassword + " " + (user == null ? "null" : user.getId()));
+                System.out.println(userLogin + " " + userPassword + " " +
+                        (user == null ? "null" : user.getId()));
                 response.sendRedirect(request.getRequestURI());
                 return;
             }
         }
 
         String authData = (String) session.getAttribute("AuthError");
-        if (authData != null) {
+        if (authData != null) {  // В сессии хранится ошибка авторизации
             request.setAttribute("AuthError", authData);
             session.removeAttribute("AuthError");
         }
         authData = (String) session.getAttribute("AuthUserId");
-        if (authData != null) {
+        if (authData != null) {  // В сессии - Id авторизованного пользователя
             request.setAttribute("AuthUser", userDAO.getUserById(authData));
         }
 

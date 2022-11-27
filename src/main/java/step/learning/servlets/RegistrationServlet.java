@@ -12,12 +12,13 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.*;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.util.Arrays;
 import java.util.UUID;
 
-@WebServlet("/registration/")
-@MultipartConfig
+@WebServlet("/register/")   // servlet-api
+@MultipartConfig            // прием multipart - данных
 @Singleton
 public class RegistrationServlet extends HttpServlet {
     @Inject
@@ -27,24 +28,25 @@ public class RegistrationServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
+        // Проверяем, есть ли сохраненные в сессии данные от предыдущей обработки
         HttpSession session = req.getSession();
         String regError = (String) session.getAttribute("regError");
         String regOk = (String) session.getAttribute("regOk");
 
-        if (regError != null) {
+        if (regError != null) {  // сообщение об ошибке
             req.setAttribute("regError", regError);
-            session.removeAttribute("regError");
-        }
-        if (regOk != null) {
-            req.setAttribute("regOk", regOk);
-            session.removeAttribute("regOk");
+            session.removeAttribute("regError");  // удаляем сообщение из сессии
         }
 
-//        req.setAttribute("pageBody", "reg_user.jsp");
-//        req.getRequestDispatcher("/WEB-INF/_layout.jsp").forward(req, resp);
+        if (regOk != null) {  // сообщение об успешной регистрации
+            req.setAttribute("regOk", regOk);
+            session.removeAttribute("regOk");  // удаляем сообщение из сессии
+        }
+
+        System.out.println(req.getContextPath());
         req.setAttribute("pageBody", "auth/registration.jsp");
         req.getRequestDispatcher("/WEB-INF/_layout.jsp").forward(req, resp);
+
     }
 
     @Override
@@ -56,13 +58,14 @@ public class RegistrationServlet extends HttpServlet {
         String userPassword = req.getParameter("Password");
         String confirmPassword = req.getParameter("confirmPassword");
         String userName = req.getParameter("Name");
-        Part userAvatar = req.getPart("Avatar");
+        String userEmail = req.getParameter("Email");
+        Part userAvatar = req.getPart("Avatar");  // часть, отвечающая за файл (имя - как у input)
 
         // Валидация данных
         String errorMessage = null;
         try {
+            // Login
             if (userLogin == null || userLogin.isEmpty()) {
-                System.out.println(req.getParameter("Login"));
                 throw new Exception("Login could not be empty");
             }
             if (!userLogin.equals(userLogin.trim())) {
@@ -71,12 +74,24 @@ public class RegistrationServlet extends HttpServlet {
             if (userDAO.isLoginUsed(userLogin)) {
                 throw new Exception("Login is already in use");
             }
+
+            // Email можно использовать один и тот же email
+            if (userEmail == null || userEmail.isEmpty()) {
+                throw new Exception("Email could not be empty");
+            }
+            if (!userEmail.equals(userEmail.trim())) {
+                throw new Exception("Email could not contain trailing spaces");
+            }
+
+            // Password
             if (userPassword == null || userPassword.isEmpty()) {
                 throw new Exception("Password could not be empty");
             }
             if (!userPassword.equals(confirmPassword)) {
                 throw new Exception("Passwords mismatch");
             }
+
+            // Name
             if (userName == null || userName.isEmpty()) {
                 throw new Exception("Name could not be empty");
             }
@@ -85,14 +100,16 @@ public class RegistrationServlet extends HttpServlet {
             }
 
             // Avatar
-            if (userAvatar == null) {
+            if (userAvatar == null) {  // такое возможно если на форме нет <input type="file" name="userAvatar"
                 throw new Exception("Form integrity violation");
             }
+
             long size = userAvatar.getSize();
             String savedName = null;
-            if (size > 0) {
-                String userFilename = userAvatar.getSubmittedFileName();
-
+            if (size > 0) {  // если на форме есть input, то узнать приложен ли файл можно по его размеру
+                // файл приложен - обрабатываем его
+                String userFilename = userAvatar.getSubmittedFileName();  // имя приложенного файла
+                // отделяем расширение, проверяем на разрешенные, имя заменяем на UUID
                 int dotPosition = userFilename.lastIndexOf('.');
                 if (dotPosition == -1) {
                     throw new Exception("File extension required");
@@ -103,10 +120,12 @@ public class RegistrationServlet extends HttpServlet {
                 }
                 savedName = UUID.randomUUID() + extension;
 
-                // String path = new File( "./" ).getAbsolutePath() ;
-                String path = req.getServletContext().getRealPath("/");  // ....\target\WebBasics\
-                File file = new File(path + "../upload/" + savedName);
+
+                String path = req.getServletContext().getRealPath("/");
+                File file = new File(path + "img\\" + savedName);
                 Files.copy(userAvatar.getInputStream(), file.toPath());
+                System.out.println(userAvatar.getInputStream());
+                System.out.println(file.toPath());
             }
 
             User user = new User();
@@ -114,54 +133,94 @@ public class RegistrationServlet extends HttpServlet {
             user.setLogin(userLogin);
             user.setPass(userPassword);
             user.setAvatar(savedName);
+            user.setEmail(userEmail);
+
             if (userDAO.add(user) == null) {
-                throw new Exception("Server error, try later");
+                throw new Exception("User is not added. Server error, try later");
             }
         } catch (Exception ex) {
             errorMessage = ex.getMessage();
         }
-        // Результат валидации
+
+        // Проверяем успешность валидации
         if (errorMessage != null) {
-            session.setAttribute("savedLogin", req.getParameter("Login"));
-            session.setAttribute("savedName", req.getParameter("Name"));
+            // Возвращаем данные если он не прошли валидацию
+            session.setAttribute("savedLogin", req.getParameter("Login"));    // Логин
+            session.setAttribute("savedName", req.getParameter("Name"));    // Имя
+            session.setAttribute("savedEmail", req.getParameter("Email"));  // Почта
+
             session.setAttribute("regError", errorMessage);
-        } else {
+        } else {  // нет ошибок
             session.setAttribute("regOk", "Registration successful");
         }
         resp.sendRedirect(req.getRequestURI());
     }
 
-
     @Override
-    protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPut(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
+//        Д.З. Обеспечить передачу изменного имени пользователя в БД,
+//             со стороны HTML вывести сообщение об ошибке, если ответ от сервера будет отрицательным
+//
         User changes = new User();
         User authUser = (User) req.getAttribute("AuthUser");
+
+//        Д.З. Реализовать загрузку файла-аватарки, заменить у пользователя данные
+//             ! не забыть удалить старый файл
         Part userAvatar = null;
         try {
             userAvatar = req.getPart("userAvatar");
         } catch (Exception ignored) {
         }
-/*
-Д.З. Реализовать загрузку файла-аватарки, заменить у пользователя данные
-! не забыть удалить старый файл
- */
+
+        String savedName = null;
         if (userAvatar != null) {
-            resp.getWriter().print("File '" + userAvatar.getSubmittedFileName() + "' in use");
-            return;
+            long size = userAvatar.getSize();
+
+            if (size > 0) {
+                String userFilename = userAvatar.getSubmittedFileName();
+                int dotPosition = userFilename.lastIndexOf(".");
+                if (dotPosition == -1) {
+                    res.getWriter().print("File extension needed");
+                }
+
+                String extension = userFilename.substring(dotPosition);
+                if (!mimeService.isImage(extension)) {
+                    res.getWriter().print("Invalid file extension");
+                }
+
+                savedName = UUID.randomUUID() + extension;
+                String path = req.getServletContext().getRealPath("/");
+                File file = new File(path + "img\\" + savedName);
+                Files.copy(userAvatar.getInputStream(), file.toPath());
+
+                // ! не забыть удалить старый файл
+                File oldFile = new File(path + "img\\" + authUser.getAvatar());
+                if (oldFile.delete()) {
+                    System.out.println("Old avatar file has been deleted");
+                }
+            }
         }
+
+
         String reply;
         String login = req.getParameter("login");
         if (login != null) {
             if (userDAO.isLoginUsed(login)) {
-                resp.getWriter().print("Login '" + login + "' in use");
+                res.getWriter().print("Login '" + login + "' is in use");
                 return;
             }
             changes.setLogin(login);
         }
+
         changes.setId(authUser.getId());
         changes.setName(req.getParameter("name"));
-        reply = userDAO.updateUser(changes) ? "OK" : "Update error";
-        resp.getWriter().print(reply);
+        changes.setEmail(req.getParameter("email"));
+
+        changes.setPass(req.getParameter("password"));
+        changes.setAvatar(savedName);
+
+        reply = userDAO.updateUser(changes) ? "Update successful" : "Update error";
+        res.getWriter().print(reply);
     }
 
 }

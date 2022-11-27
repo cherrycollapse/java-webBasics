@@ -3,7 +3,6 @@
 <%
     String authError = (String) request.getAttribute("AuthError");
     User authUser = (User) request.getAttribute("AuthUser");
-
     String home = request.getContextPath();
 %>
 
@@ -42,18 +41,23 @@
             </form>
 
 
-            <% if (authError != null) { %>
+            <% if( authError != null ) { %>
             <span class="auth-error"><%= authError %></span>
-            <% }
-            } else { %>
+            <% } } else { %>
             <span>Hello, </span>
-            <b><%= authUser.getName() %>
-            </b>
+            <b><%= authUser.getName() %></b>
             <a href="<%=home%>/profile" class="auth-profile-a">
                 <img class="auth-fragment-avatar"
                      src="<%=home%>/image/<%=authUser.getAvatar()%>"
-                     alt="<%=authUser.getLogin()%>"/>
+                     alt="<%=authUser.getLogin()%>" />
             </a>
+
+            <!-- если почта требует подтверждения, то выводим ссылку -->
+            <% if( authUser.getEmailCode() != null ) { %>
+            <a href="<%=home%>/checkmail/"
+               title="Почта не подтверждена, перейти на страницу подтверждения">&#x1F4E7;</a>
+            <% } %>
+
             <a href="?logout=true">Log out</a>
             <% } %>
         </div>

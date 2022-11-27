@@ -64,3 +64,13 @@ label {
 .profile-name b {
     padding: .1em .3em;
 }
+
+.email-banned {
+    color: crimson; !important;
+}
+.email-check {
+    color: DarkOrange; !important;
+}
+.email-ok {
+    color: forestgreen; !important;
+}

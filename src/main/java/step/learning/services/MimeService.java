@@ -5,37 +5,31 @@ import com.google.inject.Singleton;
 import java.util.HashMap;
 import java.util.Map;
 
+//Д.З. Створити перелік дозволених розширень файлів-картинок
+//        та відповідні їм MIME-типи. Переробити блок перевірки розширень
+//        .png -- image/png
+
 @Singleton
 public class MimeService {
-    private final Map<String, String> imageTypes ;
+    private final Map<String, String> imageTypes;
 
     public MimeService() {
-        imageTypes = new HashMap<>() ;
-        imageTypes.put( ".bmp",  "image/bmp"  ) ;
-        imageTypes.put( ".gif",  "image/gif"  ) ;
-        imageTypes.put( ".jpg",  "image/jpeg" ) ;
-        imageTypes.put( ".jpeg", "image/jpeg" ) ;
-        imageTypes.put( ".png",  "image/png"  ) ;
+        imageTypes = new HashMap<>();
+        imageTypes.put(".bmp", "image/bmp");
+        imageTypes.put(".gif", "image/gif");
+        imageTypes.put(".jpg", "image/jpeg");
+        imageTypes.put(".jpeg", "image/jpeg");
+        imageTypes.put(".png", "image/png");
     }
 
-    /**
-     * Checks if extension given corresponds to image type
-     * @param extension file extension with dot char '.png'
-     * @return boolean
-     */
-    public boolean isImage( String extension ) {
-        return imageTypes.containsKey( extension ) ;
+    public boolean isImage(String extension) {
+        return imageTypes.containsKey(extension);
     }
 
-    /**
-     * Define MIME type by file extension
-     * @param extension file extension with dot char '.png'
-     * @return MIME type or null if extension not registered
-     */
-    public String getMimeByExtension( String extension ) {
-        if( imageTypes.containsKey( extension ) ) {
-            return imageTypes.get( extension ) ;
+    public String getMimeByExtension(String extension) {
+        if (imageTypes.containsKey(extension)) {
+            return imageTypes.get(extension);
         }
-        return null ;
+        return null;
     }
 }

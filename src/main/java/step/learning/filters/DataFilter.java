@@ -16,11 +16,12 @@ import java.sql.Statement;
 public class DataFilter implements Filter {
 
     //private FilterConfig filterConfig;
-    private final DataService dataService ;
-    private FilterConfig filterConfig ;
+    private final DataService dataService;
+    private FilterConfig filterConfig;
+
     @Inject
-    public DataFilter( DataService dataService ) {
-        this.dataService = dataService ;
+    public DataFilter(DataService dataService) {
+        this.dataService = dataService;
     }
 
     @Override
@@ -29,7 +30,7 @@ public class DataFilter implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest servletRequest,ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
 
         DataService dataService = new MysqlDataService();
 
@@ -39,33 +40,30 @@ public class DataFilter implements Filter {
         //  (любая таблица для примера). * - вывести данные из таблицы.
 
         // пытаемся получить подключение
-        if(dataService.getConnection() == null){
-            servletRequest.getRequestDispatcher( "WEB-INF/content/static.jsp" ).forward( servletRequest, servletResponse );
-        }
-        else {
+        if (dataService.getConnection() == null) {
+            servletRequest.getRequestDispatcher("WEB-INF/content/static.jsp").forward(servletRequest, servletResponse);
+        } else {
             Connection connection = dataService.getConnection();
 
             ResultSet res;
             String queryRes;
 
             try (Statement statement = connection.createStatement()) {
-                 res = statement.executeQuery("SELECT COUNT(*) FROM randoms2");
+                res = statement.executeQuery("SELECT COUNT(*) FROM randoms2");
 
-                if(res.next()) {
+                if (res.next()) {
                     queryRes = "Entries in DB = " + res.getInt(1);
-                }
-                else {
+                } else {
                     queryRes = "No entries";
                 }
-            }
-            catch(SQLException ex) {
+            } catch (SQLException ex) {
                 queryRes = ex.getMessage();
             }
 
             servletRequest.setAttribute("count", queryRes);
 
-            servletRequest.setAttribute( "DataService", dataService ) ;
-            filterChain.doFilter( servletRequest, servletResponse ) ;
+            servletRequest.setAttribute("DataService", dataService);
+            filterChain.doFilter(servletRequest, servletResponse);
 
         }
     }
