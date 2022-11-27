@@ -40,6 +40,7 @@
                 </div>
             </form>
 
+            // Д.З. Реализовать работу "кнопки" Log out - выход из авторизованного режима
 
             <% if( authError != null ) { %>
             <span class="auth-error"><%= authError %></span>
