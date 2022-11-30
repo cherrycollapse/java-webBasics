@@ -162,7 +162,7 @@
             }
             let formData = new FormData();
             formData.append("userAvatar", avatarInput.files[0]);
-            fetch("/Java_WebBasics_war_exploded/register/", {
+            fetch("/java_webBasics_war_exploded/register/", {
                 method: "PUT",
                 headers: {},
                 body: formData  // наличие файла в formData автоматически сформирует multipart запрос
@@ -193,7 +193,7 @@
             if (e.target.savedText !== e.target.innerText) {
                 if (confirm("Сохранить изменения?")) {
                     const fieldName = e.target.getAttribute("data-field-name");
-                    const url = "/Java_WebBasics_war_exploded/register/?" + fieldName + "=" + e.target.innerText;
+                    const url = "/java_webBasics_war_exploded/register/?" + fieldName + "=" + e.target.innerText;
                     // console.log( url ) ; return ;
                     fetch(url, {
                         method: "PUT",
